@@ -1,0 +1,48 @@
+<?php
+// Test Cases
+$arr = [278, 576, 496, 727, 410, 124, 338, 149, 209, 702, 282, 718, 771, 575, 436];
+$arr2 = [1, 7, 2, 4];
+$no = 7;
+
+
+function nonDivisibleSubset($k, $s)
+{
+
+    //Check if there is only one value in array then return 1 , as one no cannot add itself because of the problem constraints
+    if (count($s) == 1) {
+        return 1;
+    }
+
+    // Fill an array with $k zeroes , This array would store our remainders
+    $firstarr = array_fill(0, $k, 0);
+
+    //Then we store our remainders
+    for ($i = 0; $i < count($s); $i++) {
+        if ($k != $s[$i]) {
+            $firstarr[$s[$i] % $k] += 1;
+        }
+    }
+
+
+    //Finally these cases all ensure two numbers that have sum that is divisible by $k are no counted
+    $case =  min($firstarr[0], 1);
+
+    if (($k % 2) == 0) {
+        $case += min($firstarr[$k / 2], 1);
+    }
+
+
+    for ($i = 1; $i < count($firstarr); $i++) {
+        if ($i != $k - $i && $firstarr[$i] != 0) {
+            $case += max($firstarr[$i], $firstarr[$k - $i]);
+            $firstarr[$k - $i] = 0;
+        }
+    }
+
+    return $case;
+}
+
+
+
+print_r(nonDivisibleSubset($no, $arr));
+// print_r(nonDivisibleSubset(3, $arr2));
